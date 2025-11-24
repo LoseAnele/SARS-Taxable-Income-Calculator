@@ -47,15 +47,16 @@
             <plugin>
                 <groupId>gg.jte</groupId>
                 <artifactId>jte-maven-plugin</artifactId>
-                <version>${jte.version}</version>
+                <version>3.1.12</version>
                 <configuration>
-                    <sourceDirectory>src/main/resources/templates</sourceDirectory>
-                    <targetDirectory>target/generated-sources/jte</targetDirectory>
+                    <sourceDirectory>${project.basedir}/src/main/resources/templates</sourceDirectory>
                     <contentType>Html</contentType>
+                    <binaryStaticContent>true</binaryStaticContent>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>generate-sources</phase>
+                        <id>precompile</id>
+                        <phase>process-classes</phase>
                         <goals>
                             <goal>precompile</goal>
                         </goals>
