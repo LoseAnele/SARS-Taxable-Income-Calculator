@@ -106,10 +106,8 @@ public class TaxCalculatorService {
 
     private TaxBracket determineApplicableBracket(BigDecimal taxableIncome) {
         for (TaxBracket bracket : TaxConstants.TAX_BRACKETS_UNDER_65) {
-            if (taxableIncome.compareTo(bracket.minIncome()) >= 0) {
+            if (taxableIncome.compareTo(bracket.minIncome()) >= 0 && taxableIncome.compareTo(bracket.maxIncome()) <= 0) {
                 return bracket;
-            } else {
-                break;
             }
         }
         return null;
