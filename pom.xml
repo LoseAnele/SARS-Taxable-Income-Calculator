@@ -53,15 +53,6 @@
                     <contentType>Html</contentType>
                     <binaryStaticContent>true</binaryStaticContent>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>precompile</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>precompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <!-- Maven Assembly Plugin: Creates the executable Fat Jar -->
