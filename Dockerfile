@@ -10,7 +10,7 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 # Copy the built jar from the previous stage
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/app.jar app.jar
 # Expose the port (Render sets this, but good for documentation)
 EXPOSE 7070
 # Run the application
