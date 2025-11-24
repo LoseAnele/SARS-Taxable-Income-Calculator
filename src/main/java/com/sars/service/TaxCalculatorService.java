@@ -54,8 +54,8 @@ public class TaxCalculatorService {
     }
 
     private TaxBeforeRebatesResult applyTaxBracketNotNull(BigDecimal taxableIncome, TaxBracket applicableBracket, List<String> steps) {
-        BigDecimal incomeAboveThreshold = taxableIncome.subtract(applicableBracket.minIncome().subtract(new BigDecimal("1")));
-        BigDecimal marginalTaxAmount = incomeAboveThreshold.multiply(new BigDecimal(applicableBracket.marginalRate()));
+        BigDecimal incomeAboveThreshold = applicableBracket.marginalRate() > 0.18 ? taxableIncome.subtract(applicableBracket.minIncome().subtract(new BigDecimal("1"))) : BigDecimal.valueOf(0);
+        BigDecimal marginalTaxAmount = applicableBracket.marginalRate() > 0.18 ? incomeAboveThreshold.multiply(new BigDecimal(applicableBracket.marginalRate())) : taxableIncome.multiply(new BigDecimal(applicableBracket.marginalRate()));
 
         BigDecimal taxBeforeRebates = applicableBracket.baseTax().add(marginalTaxAmount).setScale(DECIMAL_PLACES, RoundingMode.HALF_UP);
         double marginalRate = applicableBracket.marginalRate();
@@ -76,7 +76,7 @@ public class TaxCalculatorService {
                 .setScale(DECIMAL_PLACES, RoundingMode.HALF_UP);
 
         if (taxPayable.compareTo(BigDecimal.ZERO) < 0) {
-            taxPayable = BigDecimal.ZERO;
+            taxPayable = BigDecimal.ZERO.setScale(DECIMAL_PLACES, RoundingMode.HALF_UP);
         }
 
         steps.add(String.format("4. Final Tax Payable: Tax Before Rebates (R%,.2f) - Total Rebates (R%,.2f) = R%,.2f",
@@ -97,7 +97,7 @@ public class TaxCalculatorService {
             tertiaryRebate = TaxConstants.REBATES.get("TERTIARY");
         }
 
-        BigDecimal totalRebates = primaryRebate.add(secondaryRebate).add(tertiaryRebate);
+        BigDecimal totalRebates = primaryRebate.add(secondaryRebate).add(tertiaryRebate).setScale(DECIMAL_PLACES, RoundingMode.HALF_UP);
         steps.add(String.format("3. Apply Rebates: Primary (R%,.2f) + Secondary (R%,.2f) + Tertiary (R%,.2f) = R%,.2f",
                 primaryRebate, secondaryRebate, tertiaryRebate, totalRebates));
 
